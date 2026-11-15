@@ -39,6 +39,13 @@ def format_size(n):
         i=i+1
     return str(n)+units[i]
 
+def print_stats(stats):
+    items=sorted(stats.items(),key=lambda kv: kv[1][1],reverse=True)
+    for ext,(count,size) in items:
+        name = ext.lstrip(".")
+        size_str=format_size(size)
+        print(f"{name:<10}{count:>4}个{size_str:>10}")
+
 
 
 
@@ -54,8 +61,8 @@ def main():
         print(f"错误:没有读取权限:{args.path}", file=sys.stderr)
     files = iter_files(args.path)
     stats = collect_stats(files)
+    print_stats(stats)
 
-    print(stats)
 
 
 if __name__ == "__main__":
