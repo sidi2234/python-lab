@@ -8,7 +8,7 @@
 ## 2.IndentationError
 - 报错最后一行:unindent does not match any outer indentation level
 - 这个pycharm也直接报错告诉我缩减不对,在运行程序之前就能修改
-- 真正原因:缩进不对
+- 真正原因:缩进不对,导致后面if判断的代码结构不对
 
 ## 3.TypeError:
 - 报错最后一行:'NoneType' object is not subscriptable
