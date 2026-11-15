@@ -39,7 +39,7 @@ def format_size(n):
     while n>=1024 and i<len(units)-1:
         n=n/1024
         i=i+1
-    return str(n)+units[i]
+    return f"{n:.2f}{units[i]}"
 
 def print_stats(stats,top):
     items=sorted(stats.items(),key=lambda kv: kv[1][1],reverse=True)
