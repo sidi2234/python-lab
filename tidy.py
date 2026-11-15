@@ -15,6 +15,8 @@ def parse_args():
 def iter_files(path: str):
     for root, dirs, files in os.walk(path):
         for f in files:
+            if f.startswith("."):
+                continue
             yield os.path.join(root, f)
 
 
