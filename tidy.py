@@ -31,6 +31,16 @@ def collect_stats(files):
         stats[ext][1] += size
     return stats
 
+def format_size(n):
+    units=["B","KB","MB","GB","TB"]
+    i=0
+    while n>=1024 and i<len(units)-1:
+        n=n/1024
+        i=i+1
+    return str(n)+units[i]
+
+
+
 
 def main():
     args = parse_args()
