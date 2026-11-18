@@ -29,5 +29,11 @@ def validate_path(path):
         sys.exit('无权访问Windows目录')
 
     return resolved
-
+blacklist={'.git','.env','.DS_Store','.venv','node_modules','__pycache__'}
+def is_blacklisted(p:Path)->bool:
+    if p.name.startswith('.'):
+        return True
+    if any(part in blacklist for part in p.parts):
+        return True
+    return False
 
