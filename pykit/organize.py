@@ -36,4 +36,12 @@ def is_blacklisted(p:Path)->bool:
     if any(part in blacklist for part in p.parts):
         return True
     return False
+def scan(base:Path):
+    for entry in base.iterdir():
+        if entry.is_blacklisted():
+            continue
+        if entry.is_dir():
+            yield from scan(entry)
+        elif entry.is_file():
+            yield entry
 
