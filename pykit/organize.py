@@ -8,7 +8,7 @@ def parse_args():
     parser= argparse.ArgumentParser()
     parser.add_argument('--path',required=True,help="文件路径")
     parser.add_argument('--dry-run',action='store_true',help='只打印不移动')
-    parser.add_argument('--by-date',action='store_ture',help='按修改时间归档')
+    parser.add_argument('--by-date',action='store_true',help='按修改时间归档')
     return parser.parse_args()
 
 def validate_path(path):
@@ -29,7 +29,7 @@ def validate_path(path):
         sys.exit('无权访问Windows目录')
 
     return resolved
-blacklist={'.git','.env','.DS_Store','.venv','node_modules','__pycache__'}
+blacklist={'node_modules','__pycache__'}
 def is_blacklisted(p:Path)->bool:
     if p.name.startswith('.'):
         return True
@@ -38,7 +38,7 @@ def is_blacklisted(p:Path)->bool:
     return False
 def scan(base:Path):
     for entry in base.iterdir():
-        if entry.is_blacklisted():
+        if is_blacklisted(entry):
             continue
         if entry.is_dir():
             yield from scan(entry)
