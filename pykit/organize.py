@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 import argparse
 
-
+BLACKLIST={"node_modules", "__pycache__"}
 def parse_args():
     parser= argparse.ArgumentParser()
     parser.add_argument('--path',required=True,help="文件路径")
@@ -34,26 +34,26 @@ def validate_path(path):
 def list_targets(src:Path)->list[Path]:
     target_list=[]
     for entry in src.iterdir():
-        if entry.name.startwith('.'):
+        if entry.name.startswith('.') or entry.name in BLACKLIST:
             continue
-        else:
-            target_list.append(src)
+        if entry.is_file():
+            target_list.append(entry)
     return target_list
 
 def target_dir_for(f,src,by_date):
     if by_date:
         mtime= f.stat().st_mtime
         d_time=datetime.fromtimestamp(mtime)
-        d_time.strftime("%Y-%m")
-        return Path(src/d_time)
+        s=d_time.strftime("%Y-%m")
+        return src/s
     else:
-        s=f.suffix().lstrip(".").lower()
-        return Path(src/s)
+        s=f.suffix.lstrip(".").lower() or "no_suffix"
+        return src/s
 
 def unique_path(dst:Path)->Path:
     i=1
     while True:
-        candidate=dst.with_name(f"{dst.stem}({i}{dst.suffix})")
+        candidate=dst.with_name(f"{dst.stem}({i}){dst.suffix}")
         if not candidate.exists():
             return candidate
         i+=1
@@ -64,4 +64,4 @@ def move_one(f,dst,dry_run)->None:
         return
     dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.move(str(f),str(dst))
-    print(f"[OK] {f.name}->{dst.parent}/{f.name}")
+    print(f"[OK] {f.name}->{dst.parent}/{dst.name}")
