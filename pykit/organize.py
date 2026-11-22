@@ -1,3 +1,5 @@
+import shutil
+from datetime import datetime
 import os
 import sys
 from pathlib import Path
@@ -29,19 +31,37 @@ def validate_path(path):
         sys.exit('无权访问Windows目录')
 
     return resolved
-blacklist={'node_modules','__pycache__'}
-def is_blacklisted(p:Path)->bool:
-    if p.name.startswith('.'):
-        return True
-    if any(part in blacklist for part in p.parts):
-        return True
-    return False
-def scan(base:Path):
-    for entry in base.iterdir():
-        if is_blacklisted(entry):
+def list_targets(src:Path)->list[Path]:
+    target_list=[]
+    for entry in src.iterdir():
+        if entry.name.startwith('.'):
             continue
-        if entry.is_dir():
-            yield from scan(entry)
-        elif entry.is_file():
-            yield entry
+        else:
+            target_list.append(src)
+    return target_list
 
+def target_dir_for(f,src,by_date):
+    if by_date:
+        mtime= f.stat().st_mtime
+        d_time=datetime.fromtimestamp(mtime)
+        d_time.strftime("%Y-%m")
+        return Path(src/d_time)
+    else:
+        s=f.suffix().lstrip(".").lower()
+        return Path(src/s)
+
+def unique_path(dst:Path)->Path:
+    i=1
+    while True:
+        candidate=dst.with_name(f"{dst.stem}({i}{dst.suffix})")
+        if not candidate.exists():
+            return candidate
+        i+=1
+
+def move_one(f,dst,dry_run)->None:
+    if dry_run:
+        print(f"[DRY]{f.name}->{dst.parent}/")
+        return
+    dst.parent.mkdir(parents=True,exist_ok=True)
+    shutil.move(str(f),str(dst))
+    print(f"[OK] {f.name}->{dst.parent}/{f.name}")
