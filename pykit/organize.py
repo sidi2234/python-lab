@@ -64,4 +64,4 @@ def move_one(f,dst,dry_run)->None:
         return
     dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.move(str(f),str(dst))
-    print(f"[OK] {f.parent}/{f.name}->{dst.name}")
+    print(f"[OK] {f.name}->{dst.parent.name}")
