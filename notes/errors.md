@@ -19,3 +19,11 @@
 ## 4.FileNotFoundError
 - 报错最后一行:No such file or directory
 - 真正原因:在程序中打开文件是相对路径+cwd,在终端中cd到上一级目录,缺少路径找不到文件
+
+## 5.can't open file
+- No such file or directory
+- 原因: 终端指令输入错误,修改错误指令后成功运行
+
+## 6.输出未达到预期
+- 输出结果只有一行
+- 原因:代码缩进错误将打印指令放进循环里
