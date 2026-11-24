@@ -39,7 +39,7 @@ def list_targets(src:Path):
             continue
         if entry.is_file():
             target_list.append(entry)
-    return target_list,skipped
+    return sorted(target_list),skipped
 
 def target_dir_for(f,src,by_date):
     if by_date:
@@ -60,8 +60,8 @@ def unique_path(dst:Path)->Path:
 
 def move_one(f,dst,dry_run)->None:
     if dry_run:
-        print(f"[DRY] {f.name}->{dst.parent}/")
+        print(f"[DRY] {f.name}->{dst.parent.name}/")
         return
     dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.move(str(f),str(dst))
-    print(f"[OK] {f.name}->{dst.name}")
+    print(f"[OK] {f.parent}/{f.name}->{dst.name}")
