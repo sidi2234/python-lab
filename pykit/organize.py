@@ -47,9 +47,8 @@ def target_dir_for(f,src,by_date):
         d_time=datetime.fromtimestamp(mtime)
         s=d_time.strftime("%Y-%m")
         return src/s
-    else:
-        s=f.suffix.lstrip(".").lower() or "no_suffix"
-        return src/s
+    s=f.suffix.lstrip(".").lower() or "no_suffix"
+    return src/s
 
 def unique_path(dst:Path)->Path:
     i=1
@@ -61,8 +60,8 @@ def unique_path(dst:Path)->Path:
 
 def move_one(f,dst,dry_run)->None:
     if dry_run:
-        print(f"[DRY]{f.name}->{dst.parent}/")
+        print(f"[DRY] {f.name}->{dst.parent}/")
         return
     dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.move(str(f),str(dst))
-    print(f"[OK] {f.name}->{dst.parent}/{dst.name}")
+    print(f"[OK] {f.name}->{dst.name}")
