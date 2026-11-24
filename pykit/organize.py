@@ -31,14 +31,15 @@ def validate_path(path):
         sys.exit('无权访问Windows目录')
 
     return resolved
-def list_targets(src:Path)->list[Path]:
-    target_list=[]
+def list_targets(src:Path):
+    target_list,skipped=[],0
     for entry in src.iterdir():
         if entry.name.startswith('.') or entry.name in BLACKLIST:
+            skipped+=1
             continue
         if entry.is_file():
             target_list.append(entry)
-    return target_list
+    return target_list,skipped
 
 def target_dir_for(f,src,by_date):
     if by_date:
@@ -53,7 +54,7 @@ def target_dir_for(f,src,by_date):
 def unique_path(dst:Path)->Path:
     i=1
     while True:
-        candidate=dst.with_name(f"{dst.stem}({i}){dst.suffix}")
+        candidate=dst.with_name(f"{dst.stem} ({i}){dst.suffix}")
         if not candidate.exists():
             return candidate
         i+=1
