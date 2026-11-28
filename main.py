@@ -1,6 +1,6 @@
 import sys
 
-from organize import parse_args, validate_path, list_targets, target_dir_for, unique_path, move_one
+from pykit.organize import parse_args, validate_path, list_targets, target_dir_for, unique_path, move_one
 
 
 def main():
