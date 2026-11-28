@@ -15,3 +15,18 @@ def build_one(name):
         path.write_text(random_text(random.randint(100,500)))
 
 
+def build_all():
+    i=0
+    total=0
+    for ext,count in PLAN.items():
+        for _ in range(count):
+            name=f'file_{i:02d}{ext} 'if ext else f'file_{i:02d}'
+            try:
+                build_one(name)
+                size=(OUT_DIR/name).stat().st_size
+                print(f"[OK] {name:18s}{size:>6d}bytes")
+            except OSError as e:
+                print(f'[FAIL] {name}{e}')
+            print(f'/n共生成{total}个文件->{OUT_DIR.resolve()}')
+if __name__=='__main__':
+    build_all()
