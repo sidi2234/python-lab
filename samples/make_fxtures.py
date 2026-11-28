@@ -28,5 +28,3 @@ def build_all():
             except OSError as e:
                 print(f'[FAIL] {name}{e}')
             print(f'/n共生成{total}个文件->{OUT_DIR.resolve()}')
-if __name__=='__main__':
-    build_all()
